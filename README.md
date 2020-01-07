@@ -63,10 +63,10 @@ Todo-List
 * Équipements
 * Système de drag’n’drop
 * Fichiers des classes
-* ***Gestion des gains d’xp***
-* ***Gestion de la mort du personnage***
-* ***Gestion de la santé***
-* ***Affichage de l’UI***
-* ***IA des monstres pour attaquer si range possible***
-* ***Gestion des collisions entités-map***
-* ***Affichage de la map***
+* ~~*Gestion des gains d’xp*~~
+* ~~*Gestion de la mort du personnage*~~
+* ~~*Gestion de la santé*~~
+* ~~*Affichage de l’UI*~~
+* ~~*IA des monstres pour attaquer si range possible*~~
+* ~~*Gestion des collisions entités-map*~~
+* ~~*Affichage de la map*~~
