@@ -1,0 +1,8 @@
+Graphics : Ahmet "Elthen" Avci - http://www.patreon.com/elthen
+	   Manuel Bolaños Gómez
+	   Buch - https://opengameart.org/users/buch
+
+Audio : Manuel Bolaños Gómez
+	p0ss
+
+Code : Pyxel
