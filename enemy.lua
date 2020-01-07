@@ -79,7 +79,7 @@ function CreateEnemy(pX, pY, pImage)
 
   enemy.newX, enemy.newY = getEmptyPosition(enemy)
 
-  enemy.level = 2
+  enemy.level = math.random(1,50)
   enemy.maxLife = 150
   enemy.life = enemy.maxLife
   enemy.regenHpPerSecond = 0.2
@@ -96,11 +96,14 @@ function CreateEnemy(pX, pY, pImage)
   enemy.int = 4
   enemy.agi = 0
   enemy.wis = 0
-  enemy.shd = 45000
+  enemy.shd = 20
 
   enemy.killBy = {}
 
   enemy.powerType = "int"
+
+  enemy.gold = math.random(15, 23) * enemy.level
+  enemy.isGoldGiven = false
 
   table.insert(lstEnemies, enemy)
   return enemy
@@ -253,21 +256,37 @@ function UpdateEnemy(dt)
         StartAnimation(enemy, "idle")
       end
 
-      if math.dist(enemy.x,enemy.y, enemy.newX,enemy.newY) < 2 then enemy.moveToNewPos = false end
+      if math.dist(enemy.x,enemy.y, enemy.newX,enemy.newY) < 2 then
+        enemy.moveToNewPos = false
+      end
     else
       if enemy.life <= 0 then
         StartAnimation(enemy, "death")
-        if not enemy.isExperienceGiven then
-          for k,p in pairs(enemy.killBy) do
-            if enemy.experience > 0 then
-              if p.level < p.maxLevel and p.life > 0 then
+        local enemyReduceXp = false
+        for k,p in pairs(enemy.killBy) do
+          if p.life > 0 then
+            if not enemy.isExperienceGiven then
+              if enemy.experience > 0 then
                 p.experience = p.experience + 1 * (p.wis*0.2)
                 enemy.experience = enemy.experience - 1
+                enemyReduceXp = true
               end
-            else
-              enemy.isExperienceGiven = true
+            end
+            if not enemy.isGoldGiven then
+              if enemy.gold > 0 then
+                p.gold = p.gold + math.floor(enemy.gold/#enemy.killBy)
+                enemy.gold = enemy.gold - math.floor(enemy.gold/#enemy.killBy)
+              end
             end
           end
+        end
+
+        if enemy.gold <= 0 then
+          enemy.isGoldGiven = true
+        end
+        if not enemyReduceXp then
+          enemy.experience = 0
+          enemy.isExperienceGiven = true
         end
       end
     end

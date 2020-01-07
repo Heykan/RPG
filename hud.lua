@@ -245,11 +245,19 @@ love.graphics.push()
 
   -- Check mouse click on button
   local mx,my = love.mouse.getPosition()
+  if mx >= inventory_ui.x and
+     my >= inventory_ui.y and
+     mx <= inventory_ui.x + inventory_ui.w and
+     my <= inventory_ui.y + inventory_ui.h then
+    SetCursor("hand")
+  else
+    SetCursor("normal")
+  end
+
   local hover, down = false, false
   if mx >= small_round_button.x and mx <= small_round_button.x + small_round_button.w
      and my >= small_round_button.y and my <= small_round_button.y + small_round_button.h then
        hover = true
-       SetCursor("hand")
        if love.mouse.isDown(1) then
          down = true
          love.graphics.draw(small_round_button_clicked.image, small_round_button_clicked.x, small_round_button_clicked.y)
@@ -258,12 +266,12 @@ love.graphics.push()
        end
   else
     love.graphics.draw(small_round_button.image, small_round_button.x, small_round_button.y)
-    SetCursor("normal")
   end
 
   love.graphics.draw(inventory_ui.image, inventory_ui.x, inventory_ui.y)
   love.graphics.setFont(GetFont("shadow"))
   love.graphics.printf("inventory", inventory_ui.x + inventory_ui.w/2 - 125/2, inventory_ui.y + 8, 125, "center")
+  love.graphics.printf(tostring(GetPlayer(1).gold), inventory_ui.x + 28, inventory_ui.y + 354, 250, "left")
 
   if down and hover then
     leftMouseReleased = true
@@ -289,12 +297,10 @@ end
 
 -- Inventory
 function ShowInventory(pSprite, pId)
-  print("hello")
   showInventory = true
 end
 
 function CloseInventory()
-  print("bye")
   showInventory = false
 end
 

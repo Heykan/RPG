@@ -89,6 +89,8 @@ function CreatePlayer(pX, pY, pImage, pIsControllable)
 
   player.powerType = "int"
 
+  player.gold = 0
+
   SetPlayerStat(player)
 
   table.insert(lstPlayers, player)
@@ -158,7 +160,11 @@ function UpdatePlayer(dt)
         -- Other
         if love.keyboard.isDown(player.key["inventory"][1]) and not inventoryPressed then
           inventoryPressed = true
-          ShowInventory()
+          if not GetHUDState("inventory") then
+            ShowInventory()
+          else
+            CloseInventory()
+          end
         end
 
 
