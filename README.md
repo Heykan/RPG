@@ -5,15 +5,13 @@ A multiplayer RPG under construction
 
 Element du jeu
 ==============
-Element de base
-_______________
+### Element de base
 * Feu
 * Terre
 * Air
 * Eau
 
-Element de fusion
-_________________
+### Element de fusion
 * Feu + Air = Electrique
 * Feu + Eau = Brume
 * Terre + Eau = Plante
@@ -23,8 +21,7 @@ Les équipements
 ===============
 N’importe quel classe peut équiper mais applique un malus si mauvaise, cependant ça peut réserver de bonne surprise
 
-Les tiers
-_________
+### Les tiers
 Les tiers se compose en 4 groupe :
 * Low tier (Level 1 - 15)
 * Mid tier (Level 16 - 30)
