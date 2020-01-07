@@ -3,23 +3,28 @@
 ## Story
 A multiplayer RPG under construction
 
-## Element du jeu
-### Element de base
+Element du jeu
+==============
+Element de base
+_______________
 * Feu
 * Terre
 * Air
 * Eau
 
-### Element de fusion
+Element de fusion
+_________________
 * Feu + Air = Electrique
 * Feu + Eau = Brume
 * Terre + Eau = Plante
 * Eau + Air = Glace
 
-## Les équipements
+Les équipements
+===============
 N’importe quel classe peut équiper mais applique un malus si mauvaise, cependant ça peut réserver de bonne surprise
 
-### Les tiers
+Les tiers
+_________
 Les tiers se compose en 4 groupe :
 * Low tier (Level 1 - 15)
 * Mid tier (Level 16 - 30)
@@ -27,24 +32,28 @@ Les tiers se compose en 4 groupe :
 * God tier (Level 50)
 
 
-## Les classes
+Les classes
+===========
 * Sorcière
 * Guerrier
 * Gladiateur
 * Nain
 * Paysan : Classe multifonctions sans bonus ou malus avec les stuffs
 
-## Évolution des sorts
+Évolution des sorts
+===================
 Les sorts évoluent avec de l’xp comme le personnage, chaque upgrade pour un élément fusionné demande 10 pierres magique dropable en fin de donjon.
 
-## Les pierres magiques
+Les pierres magiques
+====================
 Les pierres magique s’obtiennent en fin de donjon avec un taux de 15%. Se taux augmentent avec la difficulté du donjon. Il existe 3 types de pierres différentes :
 * Pierre bleu : Permet de débloquer des sorts faibles ou faire évoluer des équipements jusqu’au niveau Mid tier
 * Pierre violette : Débloque les sorts moyen ou fait évoluer les équipements jusqu’au niveau High tier
 * Pierre rouge : Débloque les sorts puissant ou fait évoluer les équipements jusqu’au niveau God tier
 
 
-## Todo-List
+Todo-List
+=========
 * Finir le JSON des sprites
 * Intégration de Steam
 * Gérer les éléments des sorts
