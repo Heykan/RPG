@@ -146,10 +146,10 @@ function UpdateSprite(dt)
     if sprite.quad[quadId] then
       local camX,camY = GetCamera("xy")
       local mx,my = GetCursorPosition()
-      if mx > (sprite.x - sprite.quad[quadId].width/2) + camX and
-              mx < (sprite.x + sprite.quad[quadId].width/2) + camX and
-              my > (sprite.y - sprite.quad[quadId].height/2) + camY and
-              my < (sprite.y + sprite.quad[quadId].height/2) + camY then
+      if mx >= (sprite.x - sprite.quad[quadId].width/2) + camX and
+              mx <= (sprite.x + sprite.quad[quadId].width/2) + camX and
+              my >= (sprite.y - sprite.quad[quadId].height/2) + camY and
+              my <= (sprite.y + sprite.quad[quadId].height/2) + camY then
                 sprite.isMouseHover = true
       else
         sprite.isMouseHover = false

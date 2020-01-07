@@ -167,8 +167,8 @@ function DrawHUD()
     -- Check mouse click on button
     local mx,my = love.mouse.getPosition()
     local hover, down = false, false
-    if mx > round_button.x + 20 and mx < round_button.x + round_button.w
-       and my > round_button.y + 8 and my < round_button.y + round_button.h then
+    if mx >= round_button.x + 20 and mx <= round_button.x + round_button.w
+       and my >= round_button.y + 8 and my <= round_button.y + round_button.h then
          hover = true
          if love.mouse.isDown(1) then
            down = true
