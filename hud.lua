@@ -61,6 +61,7 @@ local target_mana_bar = {
 target_mana_bar.w = target_mana_bar.image:getWidth()
 target_mana_bar.h = target_mana_bar.image:getHeight()
 
+-- Drop ui
 local drop_ui = {
   image = love.graphics.newImage("images/ui/drop_ui.png")
 }
@@ -92,10 +93,44 @@ local round_button_clicked = {
 }
 round_button_clicked.w = round_button_clicked.image:getWidth()
 round_button_clicked.h = round_button_clicked.image:getHeight()
+
+-- Inventory
+local inventory_ui = {
+  image = love.graphics.newImage("images/ui/inventory_ui.png")
+}
+inventory_ui.x = screenWidth/2 - inventory_ui.image:getWidth()/2
+inventory_ui.y = screenHeight/2 - inventory_ui.image:getHeight()/2
+inventory_ui.w = inventory_ui.image:getWidth()
+inventory_ui.h = inventory_ui.image:getHeight()
+
+local small_round_button = {
+  image = love.graphics.newImage("images/ui/small_round_button.png"),
+  x = inventory_ui.x + 467,
+  y = inventory_ui.y + 5
+}
+small_round_button.w = small_round_button.image:getWidth()
+small_round_button.h = small_round_button.image:getHeight()
+
+local small_round_button_hover = {
+  image = love.graphics.newImage("images/ui/small_round_button_hover.png"),
+  x = small_round_button.x,
+  y = small_round_button.y
+}
+small_round_button_hover.w = small_round_button_hover.image:getWidth()
+small_round_button_hover.h = small_round_button_hover.image:getHeight()
+
+local small_round_button_clicked = {
+  image = love.graphics.newImage("images/ui/small_round_button_clicked.png"),
+  x = small_round_button.x,
+  y = small_round_button.y
+}
+small_round_button_clicked.w = small_round_button_clicked.image:getWidth()
+small_round_button_clicked.h = small_round_button_clicked.image:getHeight()
 --------
 
 --- Boolean
 local showItemDrop = false
+local showInventory = false
 -------
 
 function UpdateHUD(dt)
@@ -158,44 +193,92 @@ function DrawHUD()
 
   -- Drop Item
   if showItemDrop then
-    love.graphics.push()
-    love.graphics.draw(drop_ui.image, drop_ui.x, drop_ui.y)
-    love.graphics.setFont(GetFont("shadow"))
-    love.graphics.printf("item drop", drop_ui.x + drop_ui.w/2 - 125/2, drop_ui.y + 25, 125, "center")
-    love.graphics.setFont(GetFont("number_shadow"))
+    DrawItemDrop()
+  end
 
-    -- Check mouse click on button
-    local mx,my = love.mouse.getPosition()
-    local hover, down = false, false
-    if mx >= round_button.x + 20 and mx <= round_button.x + round_button.w
-       and my >= round_button.y + 8 and my <= round_button.y + round_button.h then
-         hover = true
-         SetCursor("hand")
-         if love.mouse.isDown(1) then
-           down = true
-           love.graphics.draw(round_button_clicked.image, round_button_clicked.x, round_button_clicked.y)
-         else
-           love.graphics.draw(round_button_hover.image, round_button_hover.x, round_button_hover.y)
-         end
-    else
-      love.graphics.draw(round_button.image, round_button.x, round_button.y)
-      SetCursor("normal")
-    end
-    if down and hover then
-      leftMouseReleased = true
-    end
-    if leftMouseReleased and not hover then
-      leftMouseReleased = false
-    end
-    if leftMouseReleased and hover and not love.mouse.isDown(1) then
-      leftMouseReleased = false
-      CloseItemDrop()
-    end
-    love.graphics.pop()
+  -- Show inventory
+  if showInventory then
+    DrawInventory()
   end
   love.graphics.setFont(GetFont("normal"))
 end
 
+function DrawItemDrop()
+  love.graphics.push()
+  love.graphics.draw(drop_ui.image, drop_ui.x, drop_ui.y)
+  love.graphics.setFont(GetFont("shadow"))
+  love.graphics.printf("item drop", drop_ui.x + drop_ui.w/2 - 125/2, drop_ui.y + 25, 125, "center")
+  love.graphics.setFont(GetFont("number_shadow"))
+
+  -- Check mouse click on button
+  local mx,my = love.mouse.getPosition()
+  local hover, down = false, false
+  if mx >= round_button.x + 20 and mx <= round_button.x + round_button.w
+     and my >= round_button.y + 8 and my <= round_button.y + round_button.h then
+       hover = true
+       SetCursor("hand")
+       if love.mouse.isDown(1) then
+         down = true
+         love.graphics.draw(round_button_clicked.image, round_button_clicked.x, round_button_clicked.y)
+       else
+         love.graphics.draw(round_button_hover.image, round_button_hover.x, round_button_hover.y)
+       end
+  else
+    love.graphics.draw(round_button.image, round_button.x, round_button.y)
+    SetCursor("normal")
+  end
+  if down and hover then
+    leftMouseReleased = true
+  end
+  if leftMouseReleased and not hover then
+    leftMouseReleased = false
+  end
+  if leftMouseReleased and hover and not love.mouse.isDown(1) then
+    leftMouseReleased = false
+    CloseItemDrop()
+  end
+  love.graphics.pop()
+end
+
+function DrawInventory()
+love.graphics.push()
+
+  -- Check mouse click on button
+  local mx,my = love.mouse.getPosition()
+  local hover, down = false, false
+  if mx >= small_round_button.x and mx <= small_round_button.x + small_round_button.w
+     and my >= small_round_button.y and my <= small_round_button.y + small_round_button.h then
+       hover = true
+       SetCursor("hand")
+       if love.mouse.isDown(1) then
+         down = true
+         love.graphics.draw(small_round_button_clicked.image, small_round_button_clicked.x, small_round_button_clicked.y)
+       else
+         love.graphics.draw(small_round_button_hover.image, small_round_button_hover.x, small_round_button_hover.y)
+       end
+  else
+    love.graphics.draw(small_round_button.image, small_round_button.x, small_round_button.y)
+    SetCursor("normal")
+  end
+
+  love.graphics.draw(inventory_ui.image, inventory_ui.x, inventory_ui.y)
+  love.graphics.setFont(GetFont("shadow"))
+  love.graphics.printf("inventory", inventory_ui.x + inventory_ui.w/2 - 125/2, inventory_ui.y + 8, 125, "center")
+
+  if down and hover then
+    leftMouseReleased = true
+  end
+  if leftMouseReleased and not hover then
+    leftMouseReleased = false
+  end
+  if leftMouseReleased and hover and not love.mouse.isDown(1) then
+    leftMouseReleased = false
+    CloseInventory()
+  end
+  love.graphics.pop()
+end
+
+-- Drop
 function ShowItemDrop(pSprite, pId)
   showItemDrop = true
 end
@@ -204,8 +287,21 @@ function CloseItemDrop()
   showItemDrop = false
 end
 
+-- Inventory
+function ShowInventory(pSprite, pId)
+  print("hello")
+  showInventory = true
+end
+
+function CloseInventory()
+  print("bye")
+  showInventory = false
+end
+
 function GetHUDState(pData)
   if pData == "item_drop" then
     return showItemDrop
+  elseif pData == "inventory" then
+    return showInventory
   end
 end

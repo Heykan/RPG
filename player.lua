@@ -4,6 +4,7 @@ local spell2Pressed = false
 local spell3Pressed = false
 local spell4Pressed = false
 
+local inventoryPressed = false
 --------------
 
 local lstPlayers = {}
@@ -149,6 +150,17 @@ function UpdatePlayer(dt)
         else
           player.bonusRegenHp, player.bonusRegenMana = 0,0
         end
+
+        if not love.keyboard.isDown(player.key["inventory"][1]) then
+          inventoryPressed = false
+        end
+
+        -- Other
+        if love.keyboard.isDown(player.key["inventory"][1]) and not inventoryPressed then
+          inventoryPressed = true
+          ShowInventory()
+        end
+
 
         -- Spell
         spell1Pressed = not love.keyboard.isDown(player.key["spell1"])

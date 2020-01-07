@@ -58,6 +58,8 @@ function LoadGameplay()
   player.key["down"] = {"s", "down"}
   player.key["right"] = {"d", "right"}
   player.key["up"] = {"z", "up"}
+  -- Other
+  player.key["inventory"] = {"i", ""}
   -- Spell
   player.key["spell1"] = "1"
   player.key["spell2"] = "2"
