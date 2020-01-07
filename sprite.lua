@@ -71,6 +71,7 @@ function CreateSprite(pX, pY, pImage)
   sprite.EventMouseEnter = nil
   sprite.EventMouseLeave = nil
   sprite.EventLeftMouseClick = nil
+  sprite.EventRightMouseClick = nil
 
   sprite.spells = {}
 
@@ -157,7 +158,7 @@ function UpdateSprite(dt)
     end
 
     -- Check mouse enter on sprite
-    if sprite.EventMouseEnter and sprite.isMouseHover then
+    if sprite.EventMouseEnter and sprite.isMouseHover and not GetHUDState("item_drop") then
       sprite.EventMouseEnter(sprite, i)
       sprite.alreadyExit = false
     end
@@ -166,11 +167,11 @@ function UpdateSprite(dt)
     leftBtnPressed = not love.mouse.isDown(1)
     rightBtnPressed = not love.mouse.isDown(2)
 
-    if sprite.EventLeftMouseClick and sprite.isMouseHover and love.mouse.isDown(1) and not leftBtnPressed then
+    if sprite.EventLeftMouseClick and sprite.isMouseHover and love.mouse.isDown(1) and not leftBtnPressed and not GetHUDState("item_drop") then
       sprite.EventLeftMouseClick(sprite, i)
     end
 
-    if sprite.EventRightMouseClick and sprite.isMouseHover and love.mouse.isDown(2) and not rightBtnPressed then
+    if sprite.EventRightMouseClick and sprite.isMouseHover and love.mouse.isDown(2) and not rightBtnPressed and not GetHUDState("item_drop") then
       sprite.EventRightMouseClick(sprite, i)
     end
 
@@ -182,7 +183,7 @@ function UpdateSprite(dt)
     end
 
     -- Check mouse leave sprite
-    if sprite.EventMouseLeave and not sprite.isMouseHover and not sprite.alreadyExit then
+    if sprite.EventMouseLeave and not sprite.isMouseHover and not sprite.alreadyExit and not GetHUDState("item_drop") then
       sprite.EventMouseLeave(sprite, i)
       sprite.alreadyExit = true
     end
@@ -312,15 +313,15 @@ function LoseHp(pOwner, pTarget, pHp)
   pTarget.timerShowDamage = 0
   pTarget.showDamage = true
 
-  pTarget.damageTaken = math.floor((((pTarget.level * 0.4 + 2) * pui * (pOwner.level/15) * pHp) / (pTarget.shd * 50 / 100)) + 2)-- Ajouter critique plus tard
+  pTarget.damageTaken = math.floor((((pTarget.level * 0.4 + 2) * pui * (pOwner.level/15) * pHp) / (pTarget.shd * (pTarget.level/15) * 50 / 100)) + 2)-- Ajouter critique plus tard
   pTarget.life = pTarget.life - pTarget.damageTaken
 
   if pTarget.killBy then
-    if not table.contains(pTarget.killBy, to2) then
-      table.insert(pTarget.killBy, to2)
-    end
     if not table.contains(pTarget.killBy, pOwner) then
       table.insert(pTarget.killBy, pOwner)
+    end
+    if not table.contains(pTarget.killBy, to2) then
+      table.insert(pTarget.killBy, to2)
     end
   end
 

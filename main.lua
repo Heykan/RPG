@@ -51,8 +51,8 @@ function LoadGameplay()
 
   local player = CreatePlayer(6*32, 5*32,"Witch_Sprite_Sheet", true)
   to2 = CreatePlayer(8*32, 5*32,"Witch_Sprite_Sheet", false)
-  --UpLevel(player, 49)
-  --UpLevel(to2, 49)
+  UpLevel(player, 50)
+  UpLevel(to2, 50)
   -- Movement
   player.key["left"] = {"q", "left"}
   player.key["down"] = {"s", "down"}
@@ -75,7 +75,7 @@ function LoadGameplay()
 end
 
 function love.load(args)
-  love.mouse.setCursor(cursor_normal)
+  SetCursor("normal")
   LoadGameplay()
 end
 
@@ -100,7 +100,6 @@ function love.draw()
     DrawFx()
     love.graphics.pop()
     love.graphics.push()
-    --love.graphics.scale(1.4, 1.4)
     DrawHUD()
     love.graphics.pop()
   end

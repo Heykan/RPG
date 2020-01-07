@@ -1,8 +1,8 @@
 return {
   name = "Spirit Fire",
   id = 2,
-  cooldown = 0.5,
-  cost = 75,
+  cooldown = 0.2,
+  cost = 70,
   damage = 45,
   range = 170,
   timerCooldown = 0,

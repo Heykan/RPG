@@ -170,6 +170,7 @@ function DrawHUD()
     if mx >= round_button.x + 20 and mx <= round_button.x + round_button.w
        and my >= round_button.y + 8 and my <= round_button.y + round_button.h then
          hover = true
+         SetCursor("hand")
          if love.mouse.isDown(1) then
            down = true
            love.graphics.draw(round_button_clicked.image, round_button_clicked.x, round_button_clicked.y)
@@ -178,6 +179,7 @@ function DrawHUD()
          end
     else
       love.graphics.draw(round_button.image, round_button.x, round_button.y)
+      SetCursor("normal")
     end
     if down and hover then
       leftMouseReleased = true

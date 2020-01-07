@@ -229,6 +229,18 @@ function GetPlayerList()
   return lstPlayers
 end
 
+function GetNearestPlayer(pEnemy)
+  local distToEnemy = 45000
+  local target = nil
+  for k,player in pairs(lstPlayers) do
+    if math.dist(pEnemy.x,pEnemy.y, player.x,player.y) < distToEnemy and player.life > 0 then
+      distToEnemy = math.dist(pEnemy.x,pEnemy.y, player.x,player.y)
+      target = player
+    end
+  end
+  return target
+end
+
 function UpLevel(pPlayer, pLevel)
   local level = pLevel or 1
   if level > 0 then
@@ -237,7 +249,9 @@ function UpLevel(pPlayer, pLevel)
       PlaySE("zap")
       PlayFx(fx, pPlayer)
       pPlayer.level = pPlayer.level + level
-
+      if pPlayer.level > pPlayer.maxLevel then
+        pPlayer.level = pPlayer.maxLevel
+      end
       SetPlayerStat(pPlayer)
 
       --local text = "=====New stat :\nLevel : "..pPlayer.level.."\nLife : "..pPlayer.maxLife.."\nMana : "..pPlayer.maxMana.."\nExp : "..pPlayer.maxExperience.."\n==============="

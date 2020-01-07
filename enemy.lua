@@ -74,20 +74,29 @@ function CreateEnemy(pX, pY, pImage)
   enemy.timerBeforeEachSpell = 0
   enemy.intervalBeforeEachSpell = rnd(2, 4)
 
+  enemy.timerResetKillBy = 0
+  enemy.intervalResetKillBy = 10
+
   enemy.newX, enemy.newY = getEmptyPosition(enemy)
 
   enemy.level = 2
-  enemy.life = 120
-  enemy.maxLife = 120
+  enemy.maxLife = 150
+  enemy.life = enemy.maxLife
   enemy.regenHpPerSecond = 0.2
   enemy.bonusRegenHp = 0
 
-  enemy.mana = 90
-  enemy.maxMana = 90
+  enemy.maxMana = 125
+  enemy.mana = enemy.maxMana
   enemy.regenManaPerSecond = 0.1
   enemy.bonusRegenMana = 0
   enemy.experience = 48 * 4 * enemy.level
   enemy.isExperienceGiven = false
+
+  enemy.str = 0
+  enemy.int = 4
+  enemy.agi = 0
+  enemy.wis = 0
+  enemy.shd = 45000
 
   enemy.killBy = {}
 
@@ -100,7 +109,7 @@ end
 function UpdateEnemy(dt)
   for i=#lstEnemies, 1, -1 do
     local enemy = lstEnemies[i]
-    local player = GetPlayer(1)
+    local player = GetNearestPlayer(enemy)
 
     if enemy.canMove and enemy.life > 0 then
       local dX, dY = 0, 0
@@ -111,6 +120,16 @@ function UpdateEnemy(dt)
         enemy.isPlayerDetected = true
       else
         enemy.isPlayerDetected = false
+      end
+
+      if #enemy.killBy > 0 and enemy.killBy[1].life > 0 then
+        player = enemy.killBy[1]
+        distToPlayer = math.dist(player.x,player.y, enemy.x,enemy.y)
+        if distToPlayer <= enemy.maxDistanceToDetect then
+          enemy.isPlayerDetected = true
+        else
+          enemy.isPlayerDetected = false
+        end
       end
 
       if enemy.isPlayerDetected then
@@ -268,6 +287,15 @@ function UpdateEnemy(dt)
         PlaySpell(enemy, enemy.spells[enemy.spellId], player)
         enemy.isCastSpell = false
         enemy.spellId = -1
+      end
+    end
+
+    -- Reset killBy
+    if #enemy.killBy > 0 and not enemy.isPlayerDetected then
+      enemy.timerResetKillBy = enemy.timerResetKillBy + dt
+      if enemy.timerResetKillBy >= enemy.intervalResetKillBy then
+        enemy.timerResetKillBy = 0
+        enemy.killBy = {}
       end
     end
 

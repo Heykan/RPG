@@ -1,3 +1,5 @@
+local spriteHover = {}
+
 local function getCursor(pFilename, pHotX, pHotY)
   local hotx = pHotX or 0
   local hoty = pHotY or 0
@@ -17,7 +19,14 @@ function GetCursor(pName)
   return cursors[pName]
 end
 
-function SetCursor(pName)
+function GetCurrentCursor()
+  return love.mouse.getCursor()
+end
+
+function SetCursor(pName, pSprite)
+  if pSprite then
+    table.insert(spriteHover, pSprite)
+  end
   love.mouse.setCursor(GetCursor(pName))
 end
 
