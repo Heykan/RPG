@@ -154,7 +154,7 @@ local spells = {}
 --- Boolean
 local showItemDrop = false
 local showInventory = false
-local showInfoBulle = false
+local showSpellInfoBulle = false
 local alreadyOnSpell = false
 -------
 
@@ -246,14 +246,14 @@ function UpdateHUD(dt)
           timerInfoBulle = timerInfoBulle + dt
           alreadyOnSpell = true
           if timerInfoBulle >= intervalInfoBulle then
-            showInfoBulle = true
+            showSpellInfoBulle = true
             spellInfo = i
           end
           SetCursor("hand")
         else
           if alreadyOnSpell and spellInfo == i then
             alreadyOnSpell = false
-            showInfoBulle = false
+            showSpellInfoBulle = false
             timerInfoBulle = 0
             spellInfo = -1
             SetCursor("normal")
@@ -441,7 +441,7 @@ function DrawSpell(pPlayer)
   love.graphics.print(string.upper(pPlayer.key["object"]), spell_round_key.x + (252*1.5), spell_round_key.y + (27*1.5))
 
   -- Spell data
-  if showInfoBulle then
+  if showSpellInfoBulle then
     local offset = 10
     empty_panel_ui.x = mx
     empty_panel_ui.y = my - empty_panel_ui.h*1.5
