@@ -560,9 +560,5 @@ function CloseInventory()
 end
 
 function GetHUDState(pData)
-  if pData == "item_drop" then
-    return showItemDrop
-  elseif pData == "inventory" then
-    return showInventory
-  end
+  return showInventory or showItemDrop or showSpellInfoBulle
 end

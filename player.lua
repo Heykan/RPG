@@ -176,65 +176,41 @@ function UpdatePlayer(dt)
 
         -- Spell
         if not love.keyboard.isDown(player.key["spell1"]) then spell1Pressed = false end
-        if not love.keyboard.isDown(player.key["spell6"]) then spell2Pressed = false end
-        if not love.keyboard.isDown(player.key["spell1"]) then spell3Pressed = false end
-        if not love.keyboard.isDown(player.key["spell1"]) then spell4Pressed = false end
-        if not love.keyboard.isDown(player.key["spell1"]) then spell5Pressed = false end
-        if not love.keyboard.isDown(player.key["spell1"]) then spell6Pressed = false end
+        if not love.keyboard.isDown(player.key["spell2"]) then spell2Pressed = false end
+        if not love.keyboard.isDown(player.key["spell3"]) then spell3Pressed = false end
+        if not love.keyboard.isDown(player.key["spell4"]) then spell4Pressed = false end
+        if not love.keyboard.isDown(player.key["spell5"]) then spell5Pressed = false end
+        if not love.keyboard.isDown(player.key["spell6"]) then spell6Pressed = false end
 
 
         if love.keyboard.isDown(player.key["spell1"]) and not player.isCastSpell and player.spells[1] and player.spells[1].isReady and target and target.isAttackable and math.dist(player.x,player.y, target.x,target.y) <= player.spells[1].range and player.mana >= player.spells[1].cost and target and not spell1Pressed then
           spell1Pressed = true
-          player.isCastSpell = true
-          player.spellId = 1
-          player.canMove = player.spells[player.spellId].canMove
-          player.spells[player.spellId].isRemovable = false
-          PlaySE("spell")
+          CastSpell(player, 1)
         end
 
         if love.keyboard.isDown(player.key["spell2"]) and not player.isCastSpell and player.spells[2] and player.spells[2].isReady and target and target.isAttackable and math.dist(player.x,player.y, target.x,target.y) <= player.spells[2].range and player.mana >= player.spells[2].cost and target and not spell2Pressed then
           spell2Pressed = true
-          player.isCastSpell = true
-          player.spellId = 2
-          player.canMove = player.spells[player.spellId].canMove
-          player.spells[player.spellId].isRemovable = false
-          PlaySE("spell")
+          CastSpell(player, 2)
         end
 
         if love.keyboard.isDown(player.key["spell3"]) and not player.isCastSpell and player.spells[3] and player.spells[3].isReady and target and target.isAttackable and math.dist(player.x,player.y, target.x,target.y) <= player.spells[3].range and player.mana >= player.spells[3].cost and target and not spell3Pressed then
           spell3Pressed = true
-          player.isCastSpell = true
-          player.spellId = 3
-          player.canMove = player.spells[player.spellId].canMove
-          player.spells[player.spellId].isRemovable = false
-          PlaySE("spell")
+          CastSpell(player, 3)
         end
 
         if love.keyboard.isDown(player.key["spell4"]) and not player.isCastSpell and player.spells[4] and player.spells[4].isReady and target and target.isAttackable and math.dist(player.x,player.y, target.x,target.y) <= player.spells[4].range and player.mana >= player.spells[4].cost and target and not spell4Pressed then
           spell4Pressed = true
-          player.isCastSpell = true
-          player.spellId = 4
-          player.canMove = player.spells[player.spellId].canMove
-          player.spells[player.spellId].isRemovable = false
-          PlaySE("spell")
+          CastSpell(player, 4)
         end
 
         if love.keyboard.isDown(player.key["spell5"]) and not player.isCastSpell and player.spells[5] and player.spells[5].isReady and target and target.isAttackable and math.dist(player.x,player.y, target.x,target.y) <= player.spells[5].range and player.mana >= player.spells[5].cost and target and not spell5Pressed then
           spell5Pressed = true
-          player.isCastSpell = true
-          player.spellId = 5
-          player.canMove = player.spells[player.spellId].canMove
-          player.spells[player.spellId].isRemovable = false
-          PlaySE("spell")
+          CastSpell(player, 5)
         end
 
         if love.keyboard.isDown(player.key["spell6"]) and not player.isCastSpell and player.spells[6] and player.spells[6].isReady and target and target.isAttackable and math.dist(player.x,player.y, target.x,target.y) <= player.spells[6].range and player.mana >= player.spells[6].cost and target and not spell6Pressed then
           spell6Pressed = true
-          player.isCastSpell = true
-          player.spellId = 6
-          player.canMove = player.spells[player.spellId].canMove
-          player.spells[player.spellId].isRemovable = false
-          PlaySE("spell")
+          CastSpell(player, 6)
         end
       end
     else
@@ -283,6 +259,14 @@ function UpdatePlayer(dt)
       table.remove(lstPlayers, i)
     end
   end
+end
+
+function CastSpell(pPlayer, pSpellId)
+  pPlayer.isCastSpell = true
+  pPlayer.spellId = pSpellId
+  pPlayer.canMove = pPlayer.spells[pPlayer.spellId].canMove
+  pPlayer.spells[pPlayer.spellId].isRemovable = false
+  PlaySE("spell")
 end
 
 function GetPlayer(pId)

@@ -1,5 +1,5 @@
 function AddSpell(pSprite, pName)
-  local spell = dofile("spells/"..pName..".lua")
+  local spell = dofile("data/spells/"..pName..".lua")
   spell.fx = CreateFx(spell.fxId, spell.width, spell.height, spell.maxFrame, spell.interval)
 
   spell.target = nil

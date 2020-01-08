@@ -169,15 +169,15 @@ function UpdateSprite(dt)
     leftBtnPressed = not love.mouse.isDown(1)
     rightBtnPressed = not love.mouse.isDown(2)
 
-    if sprite.EventLeftMouseClick and sprite.isMouseHover and love.mouse.isDown(1) and not leftBtnPressed and not GetHUDState("item_drop") and not GetHUDState("inventory") then
+    if sprite.EventLeftMouseClick and sprite.isMouseHover and love.mouse.isDown(1) and not leftBtnPressed and not GetHUDState() then
       sprite.EventLeftMouseClick(sprite, i)
     end
 
-    if sprite.EventRightMouseClick and sprite.isMouseHover and love.mouse.isDown(2) and not rightBtnPressed and not GetHUDState("item_drop") and not GetHUDState("inventory") then
+    if sprite.EventRightMouseClick and sprite.isMouseHover and love.mouse.isDown(2) and not rightBtnPressed and not GetHUDState() then
       sprite.EventRightMouseClick(sprite, i)
     end
 
-    if sprite.EventLeftMouseClick and not sprite.isMouseHover and love.mouse.isDown(1) and not leftBtnPressed and not GetHUDState("item_drop") and not GetHUDState("inventory") then
+    if sprite.EventLeftMouseClick and not sprite.isMouseHover and love.mouse.isDown(1) and not leftBtnPressed and not GetHUDState() then
       if sprite.isSelected then
         sprite.isSelected = false
         selectedSprite = -1
@@ -185,7 +185,7 @@ function UpdateSprite(dt)
     end
 
     -- Check mouse leave sprite
-    if sprite.EventMouseLeave and not sprite.isMouseHover and not sprite.alreadyExit and not GetHUDState("item_drop") and not GetHUDState("inventory") then
+    if sprite.EventMouseLeave and not sprite.isMouseHover and not sprite.alreadyExit and not GetHUDState() then
       sprite.EventMouseLeave(sprite, i)
       sprite.alreadyExit = true
     end
