@@ -126,15 +126,141 @@ local small_round_button_clicked = {
 }
 small_round_button_clicked.w = small_round_button_clicked.image:getWidth()
 small_round_button_clicked.h = small_round_button_clicked.image:getHeight()
---------
+
+-- Spell
+local spell_ui = {
+  image = love.graphics.newImage("images/ui/spell_ui.png")
+}
+spell_ui.scale = 1.5
+spell_ui.x = screenWidth/2 - (spell_ui.image:getWidth()*1.5)/2
+spell_ui.y = screenHeight - (spell_ui.image:getHeight()*1.5)-20
+
+local spell_round_key = {
+  image = love.graphics.newImage("images/ui/spell_round_key.png"),
+  x = spell_ui.x,
+  y = spell_ui.y
+}
+
+local empty_panel_ui = {
+  image = love.graphics.newImage("images/ui/empty_panel_ui.png"),
+  x = -1,
+  y = -1
+}
+empty_panel_ui.w = empty_panel_ui.image:getWidth()
+empty_panel_ui.h = empty_panel_ui.image:getHeight()
+
+local spells = {}
 
 --- Boolean
 local showItemDrop = false
 local showInventory = false
+local showInfoBulle = false
+local alreadyOnSpell = false
 -------
 
-function UpdateHUD(dt)
+--- number
+local spellInfo = -1
 
+--- timer
+local timerInfoBulle = 0
+local intervalInfoBulle = 0.5
+
+function CreateSpell(pPlayer)
+  spells = {}
+  if pPlayer.spells[1] then
+    spells[1] = {
+      image = love.graphics.newImage("images/spells/"..pPlayer.spells[1].image..".png"),
+      border = love.graphics.newImage("images/spells/"..pPlayer.spells[1].border..".png"),
+      scale = 0.19
+    }
+    spells[1].w = spells[1].image:getWidth()
+    spells[1].h = spells[1].image:getHeight()
+    spells[1].x = (spell_ui.x + 7)
+    spells[1].y = (spell_ui.y + 6)
+  end
+  if pPlayer.spells[2] then
+    spells[2] = {
+      image = love.graphics.newImage("images/spells/"..pPlayer.spells[2].image..".png"),
+      border = love.graphics.newImage("images/spells/"..pPlayer.spells[2].border..".png"),
+      scale = 0.19
+    }
+    spells[2].w = spells[2].image:getWidth()
+    spells[2].h = spells[2].image:getHeight()
+    spells[2].x = (spell_ui.x + 40*spell_ui.scale)
+    spells[2].y = (spell_ui.y + 6)
+  end
+  if pPlayer.spells[3] then
+      spells[3] = {
+        image = love.graphics.newImage("images/spells/"..pPlayer.spells[3].image..".png"),
+        border = love.graphics.newImage("images/spells/"..pPlayer.spells[3].border..".png"),
+        scale = 0.19
+      }
+      spells[3].w = spells[3].image:getWidth()
+      spells[3].h = spells[3].image:getHeight()
+      spells[3].x = (spell_ui.x + 76*spell_ui.scale)
+      spells[3].y = (spell_ui.y + 6)
+  end
+  if pPlayer.spells[4] then
+        spells[4] = {
+          image = love.graphics.newImage("images/spells/"..pPlayer.spells[4].image..".png"),
+          border = love.graphics.newImage("images/spells/"..pPlayer.spells[4].border..".png"),
+          scale = 0.19
+        }
+        spells[4].w = spells[4].image:getWidth()
+        spells[4].h = spells[4].image:getHeight()
+        spells[4].x = (spell_ui.x + 112*spell_ui.scale)
+        spells[4].y = (spell_ui.y + 6)
+  end
+  if pPlayer.spells[5] then
+      spells[5] = {
+        image = love.graphics.newImage("images/spells/"..pPlayer.spells[5].image..".png"),
+        border = love.graphics.newImage("images/spells/"..pPlayer.spells[5].border..".png"),
+        scale = 0.19
+      }
+      spells[5].w = spells[5].image:getWidth()
+      spells[5].h = spells[5].image:getHeight()
+      spells[5].x = (spell_ui.x + 148*spell_ui.scale)
+      spells[5].y = (spell_ui.y + 6)
+
+  end
+  if pPlayer.spells[6] then
+        spells[6] = {
+          image = love.graphics.newImage("images/spells/"..pPlayer.spells[6].image..".png"),
+          border = love.graphics.newImage("images/spells/"..pPlayer.spells[6].border..".png"),
+          scale = 0.19
+        }
+        spells[6].w = spells[6].image:getWidth()
+        spells[6].h = spells[6].image:getHeight()
+        spells[6].x = (spell_ui.x + 184*spell_ui.scale)
+        spells[6].y = (spell_ui.y + 6)
+  end
+end
+
+function UpdateHUD(dt)
+  local mx,my = love.mouse.getPosition()
+
+  for i=#spells, 1, -1 do
+    if spells[i] then
+      if mx >= spells[i].x and mx <= spells[i].x + spells[i].w*spells[i].scale and
+        my >= spells[i].y and my <= spells[i].y + spells[i].h*spells[i].scale then
+          timerInfoBulle = timerInfoBulle + dt
+          alreadyOnSpell = true
+          if timerInfoBulle >= intervalInfoBulle then
+            showInfoBulle = true
+            spellInfo = i
+          end
+          SetCursor("hand")
+        else
+          if alreadyOnSpell and spellInfo == i then
+            alreadyOnSpell = false
+            showInfoBulle = false
+            timerInfoBulle = 0
+            spellInfo = -1
+            SetCursor("normal")
+          end
+        end
+      end
+    end
 end
 
 function DrawHUD()
@@ -191,6 +317,9 @@ function DrawHUD()
   love.graphics.printf(tostring(math.floor(player.experience)).."/"..tostring(math.floor(player.maxExperience)), experience_bar.x+experience_bar.w/2-64, experience_bar.y+2, 170, "center", 0, 0.8, 0.8)
   love.graphics.pop()
 
+  -- Player spell
+  DrawSpell(player)
+
   -- Drop Item
   if showItemDrop then
     DrawItemDrop()
@@ -203,11 +332,136 @@ function DrawHUD()
   love.graphics.setFont(GetFont("normal"))
 end
 
+-- Other draw function
+function DrawSpell(pPlayer)
+  local mx, my = love.mouse.getPosition()
+  love.graphics.setFont(GetFont("shadow"))
+  love.graphics.draw(spell_ui.image, spell_ui.x, spell_ui.y, 0, 1.5, 1.5)
+
+  -- Spell Icon
+  if spells[1] then
+    love.graphics.draw(spells[1].image, spells[1].x, spells[1].y, 0, spells[1].scale, spells[1].scale)
+    love.graphics.draw(spells[1].border, spells[1].x, spells[1].y, 0, spells[1].scale, spells[1].scale)
+    love.graphics.setFont(GetFont("number_shadow"))
+    love.graphics.print(pPlayer.spells[1].cost, spells[1].x + 2, spells[1].y + 2)
+    love.graphics.setFont(GetFont("shadow"))
+    if not pPlayer.spells[1].isReady then
+      local percent = pPlayer.spells[1].timerCooldown/pPlayer.spells[1].cooldown
+      love.graphics.push()
+      love.graphics.setColor(0.5,0.3,0.8,0.8)
+      love.graphics.arc("fill", "pie", spells[1].x + (spells[1].w*spells[1].scale)/2, spells[1].y + (spells[1].h*spells[1].scale)/2, 20, (math.pi*2), (math.pi*2)*percent)
+      love.graphics.setColor(1,1,1,1)
+      love.graphics.pop()
+    end
+  end
+  if spells[2] then
+    love.graphics.draw(spells[2].image, spells[2].x, spells[2].y, 0, spells[2].scale, spells[2].scale)
+    love.graphics.draw(spells[2].border, spells[2].x, spells[2].y, 0, spells[2].scale, spells[2].scale)
+    love.graphics.setFont(GetFont("number_shadow"))
+    love.graphics.print(pPlayer.spells[2].cost, spells[2].x + 2, spells[2].y + 2)
+    love.graphics.setFont(GetFont("shadow"))
+    if not pPlayer.spells[2].isReady then
+      local percent = pPlayer.spells[2].timerCooldown/pPlayer.spells[2].cooldown
+      love.graphics.push()
+      love.graphics.setColor(0.5,0.3,0.8,0.8)
+      love.graphics.arc("fill", "pie", spells[2].x + (spells[2].w*spells[2].scale)/2, spells[2].y + (spells[2].h*spells[2].scale)/2, 20, (math.pi*2), (math.pi*2)*percent)
+      love.graphics.setColor(1,1,1,1)
+      love.graphics.pop()
+    end
+  end
+  if spells[3] then
+    love.graphics.draw(spells[3].image, spells[3].x, spells[3].y, 0, spells[3].scale, spells[3].scale)
+    love.graphics.draw(spells[3].border, spells[3].x, spells[3].y, 0, spells[3].scale, spells[3].scale)
+    love.graphics.setFont(GetFont("number_shadow"))
+    love.graphics.print(pPlayer.spells[3].cost, spells[3].x + 2, spells[3].y + 2)
+    love.graphics.setFont(GetFont("shadow"))
+    if not pPlayer.spells[3].isReady then
+      local percent = pPlayer.spells[3].timerCooldown/pPlayer.spells[3].cooldown
+      love.graphics.push()
+      love.graphics.setColor(0.5,0.3,0.8,0.8)
+      love.graphics.arc("fill", "pie", spells[3].x + (spells[3].w*spells[3].scale)/2, spells[3].y + (spells[3].h*spells[3].scale)/2, 20, (math.pi*2), (math.pi*2)*percent)
+      love.graphics.setColor(1,1,1,1)
+      love.graphics.pop()
+    end
+  end
+  if spells[4] then
+    love.graphics.draw(spells[4].image, spells[4].x, spells[4].y, 0, spells[4].scale, spells[4].scale)
+    love.graphics.draw(spells[4].border, spells[4].x, spells[4].y, 0, spells[4].scale, spells[4].scale)
+    love.graphics.setFont(GetFont("number_shadow"))
+    love.graphics.print(pPlayer.spells[4].cost, spells[4].x + 2, spells[4].y + 2)
+    love.graphics.setFont(GetFont("shadow"))
+    if not pPlayer.spells[4].isReady then
+      local percent = pPlayer.spells[4].timerCooldown/pPlayer.spells[4].cooldown
+      love.graphics.push()
+      love.graphics.setColor(0.5,0.3,0.8,0.8)
+      love.graphics.arc("fill", "pie", spells[4].x + (spells[4].w*spells[4].scale)/2, spells[4].y + (spells[4].h*spells[4].scale)/2, 20, (math.pi*2), (math.pi*2)*percent)
+      love.graphics.setColor(1,1,1,1)
+      love.graphics.pop()
+    end
+  end
+  if spells[5] then
+    love.graphics.draw(spells[5].image, spells[5].x, spells[5].y, 0, spells[5].scale, spells[5].scale)
+    love.graphics.draw(spells[5].border, spells[5].x, spells[5].y, 0, spells[5].scale, spells[5].scale)
+    love.graphics.setFont(GetFont("number_shadow"))
+    love.graphics.print(pPlayer.spells[5].cost, spells[5].x + 2, spells[5].y + 2)
+    love.graphics.setFont(GetFont("shadow"))
+    if not pPlayer.spells[5].isReady then
+      local percent = pPlayer.spells[5].timerCooldown/pPlayer.spells[5].cooldown
+      love.graphics.push()
+      love.graphics.setColor(0.5,0.3,0.8,0.8)
+      love.graphics.arc("fill", "pie", spells[5].x + (spells[5].w*spells[5].scale)/2, spells[5].y + (spells[5].h*spells[5].scale)/2, 20, (math.pi*2), (math.pi*2)*percent)
+      love.graphics.setColor(1,1,1,1)
+      love.graphics.pop()
+    end
+  end
+  if spells[6] then
+    love.graphics.draw(spells[6].image, spells[6].x, spells[6].y, 0, spells[6].scale, spells[6].scale)
+    love.graphics.draw(spells[6].border, spells[6].x, spells[6].y, 0, spells[6].scale, spells[6].scale)
+    love.graphics.setFont(GetFont("number_shadow"))
+    love.graphics.print(pPlayer.spells[6].cost, spells[6].x + 2, spells[6].y + 2)
+    love.graphics.setFont(GetFont("shadow"))
+    if not pPlayer.spells[6].isReady then
+      local percent = pPlayer.spells[6].timerCooldown/pPlayer.spells[6].cooldown
+      love.graphics.push()
+      love.graphics.setColor(0.5,0.3,0.8,0.8)
+      love.graphics.arc("fill", "pie", spells[6].x + (spells[6].w*spells[6].scale)/2, spells[6].y + (spells[6].h*spells[6].scale)/2, 20, (math.pi*2), (math.pi*2)*percent)
+      love.graphics.setColor(1,1,1,1)
+      love.graphics.pop()
+    end
+  end
+
+  love.graphics.draw(spell_round_key.image, spell_round_key.x, spell_round_key.y, 0, 1.5, 1.5)
+  -- Spell key
+  love.graphics.print(string.upper(pPlayer.key["spell1"]), spell_round_key.x + (28*1.5), spell_round_key.y + (27*1.5))
+  love.graphics.print(string.upper(pPlayer.key["spell2"]), spell_round_key.x + (66*1.5), spell_round_key.y + (27*1.5))
+  love.graphics.print(string.upper(pPlayer.key["spell3"]), spell_round_key.x + (102*1.5), spell_round_key.y + (27*1.5))
+  love.graphics.print(string.upper(pPlayer.key["spell4"]), spell_round_key.x + (138*1.5), spell_round_key.y + (27*1.5))
+  love.graphics.print(string.upper(pPlayer.key["spell5"]), spell_round_key.x + (172*1.5), spell_round_key.y + (27*1.5))
+  love.graphics.print(string.upper(pPlayer.key["spell6"]), spell_round_key.x + (208*1.5), spell_round_key.y + (27*1.5))
+  love.graphics.print(string.upper(pPlayer.key["object"]), spell_round_key.x + (252*1.5), spell_round_key.y + (27*1.5))
+
+  -- Spell data
+  if showInfoBulle then
+    local offset = 10
+    empty_panel_ui.x = mx
+    empty_panel_ui.y = my - empty_panel_ui.h*1.5
+    love.graphics.draw(empty_panel_ui.image, empty_panel_ui.x, empty_panel_ui.y, 0, 1.5, 1.5)
+    love.graphics.draw(spells[spellInfo].image, empty_panel_ui.x + offset, empty_panel_ui.y + offset+13, 0, spells[spellInfo].scale, spells[spellInfo].scale)
+    love.graphics.draw(spells[spellInfo].border, empty_panel_ui.x + offset, empty_panel_ui.y + offset+13, 0, spells[spellInfo].scale, spells[spellInfo].scale)
+    love.graphics.print("Name: "..pPlayer.spells[spellInfo].name, empty_panel_ui.x + spells[spellInfo].w*spells[spellInfo].scale + offset + 1, empty_panel_ui.y + offset)
+    love.graphics.print("Mana: "..tostring(pPlayer.spells[spellInfo].cost), empty_panel_ui.x + spells[spellInfo].w*spells[spellInfo].scale + offset + 1, empty_panel_ui.y + offset + offset*2)
+    love.graphics.print("Cooldown: "..tostring(pPlayer.spells[spellInfo].cooldown).." seconds", empty_panel_ui.x + spells[spellInfo].w*spells[spellInfo].scale + offset + 1, empty_panel_ui.y + offset + offset*4)
+    love.graphics.print("Damage: "..tostring(pPlayer.spells[spellInfo].damage), empty_panel_ui.x + spells[spellInfo].w*spells[spellInfo].scale + offset + 1, empty_panel_ui.y + offset + offset*6)
+    love.graphics.printf(pPlayer.spells[spellInfo].description, empty_panel_ui.x + offset, empty_panel_ui.y + spells[spellInfo].h*spells[spellInfo].scale + offset*5, empty_panel_ui.w*1.5-offset)
+  end
+  love.graphics.setFont(GetFont("number_shadow"))
+end
+
 function DrawItemDrop()
   love.graphics.push()
   love.graphics.draw(drop_ui.image, drop_ui.x, drop_ui.y)
   love.graphics.setFont(GetFont("shadow"))
-  love.graphics.printf("item drop", drop_ui.x + drop_ui.w/2 - 125/2, drop_ui.y + 25, 125, "center")
+  love.graphics.printf("Item Drop", drop_ui.x + drop_ui.w/2 - 125/2, drop_ui.y + 25, 125, "center")
   love.graphics.setFont(GetFont("number_shadow"))
 
   -- Check mouse click on button
@@ -270,7 +524,7 @@ love.graphics.push()
 
   love.graphics.draw(inventory_ui.image, inventory_ui.x, inventory_ui.y)
   love.graphics.setFont(GetFont("shadow"))
-  love.graphics.printf("inventory", inventory_ui.x + inventory_ui.w/2 - 125/2, inventory_ui.y + 8, 125, "center")
+  love.graphics.printf("Inventory", inventory_ui.x + inventory_ui.w/2 - 125/2, inventory_ui.y + 8, 125, "center")
   love.graphics.printf(tostring(GetPlayer(1).gold), inventory_ui.x + 28, inventory_ui.y + 354, 250, "left")
 
   if down and hover then
@@ -301,6 +555,7 @@ function ShowInventory(pSprite, pId)
 end
 
 function CloseInventory()
+  SetCursor("hand")
   showInventory = false
 end
 

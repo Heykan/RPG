@@ -79,7 +79,7 @@ function CreateEnemy(pX, pY, pImage)
 
   enemy.newX, enemy.newY = getEmptyPosition(enemy)
 
-  enemy.level = math.random(1,50)
+  enemy.level = 1--math.random(1,5)
   enemy.maxLife = 150
   enemy.life = enemy.maxLife
   enemy.regenHpPerSecond = 0.2
@@ -93,16 +93,16 @@ function CreateEnemy(pX, pY, pImage)
   enemy.isExperienceGiven = false
 
   enemy.str = 0
-  enemy.int = 4
+  enemy.int = 3 * enemy.level
   enemy.agi = 0
   enemy.wis = 0
-  enemy.shd = 20
+  enemy.shd = 5 * enemy.level
 
   enemy.killBy = {}
 
   enemy.powerType = "int"
 
-  enemy.gold = math.random(15, 23) * enemy.level
+  enemy.gold = math.random(3, 13) * enemy.level
   enemy.isGoldGiven = false
 
   table.insert(lstEnemies, enemy)

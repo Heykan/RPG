@@ -7,6 +7,10 @@ function AddSpell(pSprite, pName)
   spell.isRemovable = false
 
   table.insert(pSprite.spells, spell)
+
+  if pSprite.isControllable then
+    CreateSpell(pSprite)
+  end
 end
 
 function PlaySpell(pOwner, pSpell, pTarget)

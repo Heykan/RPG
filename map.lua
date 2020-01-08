@@ -2,7 +2,7 @@ local map = {}
 local tilesheet = {}
 
 local TILE_SIZE = 32
-local MAX_MONSTER = 4
+local MAX_MONSTER = 7
 
 local collide_layer = {}
 

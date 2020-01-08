@@ -264,12 +264,21 @@ function DrawSprite()
     else
       love.graphics.draw(sprite.image, sprite.quad[quadId].data, sprite.x+camX, sprite.y+camY, 0, sprite.scaleX, sprite.scaleX, sprite.quad[quadId].originX, sprite.quad[quadId].originY)
     end
+  end
+  love.graphics.setFont(GetFont("normal"))
+end
 
+function DrawDamage()
+  love.graphics.setFont(GetFont("shadow"))
+  local camX, camY = GetCamera("xy")
+  for i=#lstSprites, 1, -1 do
+    local sprite = lstSprites[i]
+    local quadId = sprite.animation[sprite.currentAnimation].frames[sprite.currentFrame]
     if sprite.showDamage then
       love.graphics.printf(tostring(sprite.damageTaken), sprite.x+camX-30, sprite.y-(sprite.quad[quadId].originY)-(sprite.timerShowDamage*10)+camY, 60, "center")
     end
   end
-  love.graphics.setFont(GetFont("normal"))
+    love.graphics.setFont(GetFont("normal"))
 end
 
 function CreateAnimation(pSprite, pAnimationName, pFrames, pIsLoop, pInterval)

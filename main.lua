@@ -42,7 +42,7 @@ local playState = "gameplay"
 
 -- font
 local font_normal = love.graphics.getFont()
-local font_shadow = love.graphics.newImageFont("images/font/font_shadow.png", " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,§?-+/()")
+local font_shadow = love.graphics.newImageFont("images/font/font_shadow.png", " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,§?-+/():;%&`'*#=[]")
 local font_number_shadow = love.graphics.newImageFont("images/font/font_number.png", "/0234567891+-")
 
 
@@ -65,11 +65,14 @@ function LoadGameplay()
   player.key["spell2"] = "2"
   player.key["spell3"] = "3"
   player.key["spell4"] = "4"
+  player.key["spell5"] = "5"
+  player.key["spell6"] = "6"
+  player.key["object"] = "a"
 
   SpawnMonster()
   SpawnMonster()
-  SpawnMonster()
-  SpawnMonster()
+  --SpawnMonster()
+  --SpawnMonster()
 
   SetCamera("scale", 2)
 
@@ -83,11 +86,12 @@ end
 
 function love.update(dt)
   if playState == "gameplay" then
-    UpdateMap(dt)
+    --UpdateMap(dt)
     UpdateSprite(dt)
     UpdatePlayer(dt)
     UpdateEnemy(dt)
     UpdateFx(dt)
+    UpdateHUD(dt)
     UpdateCamera(dt)
   end
 end
@@ -100,6 +104,7 @@ function love.draw()
     DrawMap()
     DrawSprite()
     DrawFx()
+    DrawDamage()
     love.graphics.pop()
     love.graphics.push()
     DrawHUD()
