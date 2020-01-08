@@ -35,8 +35,8 @@ end
 
 function CreateSprite(pX, pY, pImage)
   local sprite = {}
-  sprite.x = pX
-  sprite.y = pY
+  sprite.x = pX or 0
+  sprite.y = pY or 0
 
   sprite.scaleX = 1
   sprite.scaleY = 1
@@ -73,6 +73,8 @@ function CreateSprite(pX, pY, pImage)
   sprite.EventLeftMouseClick = nil
   sprite.EventRightMouseClick = nil
 
+  sprite.updateClass = nil
+
   sprite.spells = {}
 
   sprite.spellId = -1
@@ -100,6 +102,27 @@ function CreateSprite(pX, pY, pImage)
   sprite.agi = 5
   sprite.wis = 5
   sprite.shd = 5
+  sprite.atkSpeed = 0
+
+  sprite.lvlLife = 0
+  sprite.lvlMana = 0
+
+  sprite.lvlRegenMana = 0
+  sprite.lvlRegenHp = 0
+
+  sprite.lvlStr = 0
+  sprite.lvlInt = 0
+  sprite.lvlAgi = 0
+  sprite.lvlWis = 0
+  sprite.lvlShd = 0
+  sprite.lvlAtkSpeed = 0
+
+  sprite.bonusStr = 0
+  sprite.bonusInt = 0
+  sprite.bonusAgi = 0
+  sprite.bonusWis = 0
+  sprite.bonusShd = 0
+  sprite.bonusAtkSpeed = 0
 
   sprite.powerType = "null"
 
@@ -136,7 +159,9 @@ function UpdateSprite(dt)
     if sprite.canMove then
       sprite.canMove = sprite.life > 0
     end
-    sprite.isAttackable = sprite.life > 0 and not sprite.isNpc
+    if sprite.life <= 0 or sprite.isNpc then
+      sprite.isAttackable = false
+    end
 
     if sprite.isSelected then
       selectedSprite = i
@@ -311,14 +336,109 @@ function GetSelectedSprite()
   return lstSprites[selectedSprite]
 end
 
+function GetSprite(pName)
+  return dofile("data/sprite/"..pName..".lua")
+end
+
+function SetDefaultStat(pSprite, pType, pClass)
+  if pType == "player" then
+    local class = dofile("data/class/"..pClass..".lua")
+    pSprite.baseLife = class.baseLife
+    pSprite.baseMana = class.baseMana
+    pSprite.baseExperience = class.baseExperience
+
+    pSprite.maxLife = class.baseLife
+    pSprite.maxMana = class.baseMana
+
+    pSprite.regenHpPerSecond = class.regenHpPerSecond
+    pSprite.bonusRegenHp = class.bonusRegenHp
+
+    pSprite.regenManaPerSecond = class.regenManaPerSecond
+    pSprite.bonusRegenMana = class.bonusRegenMana
+
+    pSprite.experience = class.experience
+
+    pSprite.str = class.str
+    pSprite.int = class.int
+    pSprite.agi = class.agi
+    pSprite.wis = class.wis
+    pSprite.shd = class.shd
+
+    pSprite.lvlLife = class.lvlLife
+    pSprite.lvlMana = class.lvlMana
+
+    pSprite.lvlRegenHp = class.lvlRegenHp
+    pSprite.lvlRegenMana = class.lvlRegenMana
+
+    pSprite.lvlStr = class.lvlStr
+    pSprite.lvlInt = class.lvlInt
+    pSprite.lvlAgi = class.lvlAgi
+    pSprite.lvlWis = class.lvlWis
+    pSprite.lvlShd = class.lvlShd
+
+    for k,spell in pairs(class.spells) do
+      table.insert(pSprite.spells,spell)
+    end
+    CreateSpell(pSprite)
+
+    pSprite.updateClass = class.updateClass
+  else
+    local class = dofile("data/monster/"..pClass..".lua")
+    pSprite.baseLife = class.baseLife
+    pSprite.baseMana = class.baseMana
+    pSprite.baseExperience = class.baseExperience
+
+    pSprite.maxLife = class.baseLife
+    pSprite.maxMana = class.baseMana
+
+    pSprite.life = pSprite.maxLife
+    pSprite.mana = pSprite.maxMana
+
+    pSprite.regenHpPerSecond = class.regenHpPerSecond
+    pSprite.bonusRegenHp = class.bonusRegenHp
+
+    pSprite.regenManaPerSecond = class.regenManaPerSecond
+    pSprite.bonusRegenMana = class.bonusRegenMana
+
+    pSprite.experience = class.experience
+
+    pSprite.str = class.str
+    pSprite.int = class.int
+    pSprite.agi = class.agi
+    pSprite.wis = class.wis
+    pSprite.shd = class.shd
+
+    pSprite.lvlLife = class.lvlLife
+    pSprite.lvlMana = class.lvlMana
+
+    pSprite.lvlRegenHp = class.lvlRegenHp
+    pSprite.lvlRegenMana = class.lvlRegenMana
+
+    pSprite.lvlStr = class.lvlStr
+    pSprite.lvlInt = class.lvlInt
+    pSprite.lvlAgi = class.lvlAgi
+    pSprite.lvlWis = class.lvlWis
+    pSprite.lvlShd = class.lvlShd
+
+    pSprite.distanceToDetect = class.distanceToDetect
+    pSprite.maxDistanceToDetect = class.maxDistanceToDetect
+
+    for k,spell in pairs(class.spells) do
+      table.insert(pSprite.spells,spell)
+    end
+
+    pSprite.updateClass = class.updateClass
+  end
+end
+
 function LoseHp(pOwner, pTarget, pHp)
   local pui = 0
   if pOwner.powerType == "int" then
-    pui = pOwner.int
+    pui = pOwner.int + pOwner.bonusInt
   elseif pOwner.powerType == "str" then
-    pui = pOwner.str
+    pui = pOwner.str + pOwner.bonusStr
   elseif pOwner.powerType == "agi" then
-    pui = pOwner.agi
+    pui = pOwner.agi+ pOwner.bonusAgi
   end
 
   pTarget.timerShowDamage = 0

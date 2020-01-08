@@ -49,8 +49,8 @@ local font_number_shadow = love.graphics.newImageFont("images/font/font_number.p
 function LoadGameplay()
   LoadMap("debug_map")
 
-  local player = CreatePlayer(6*32, 5*32,"Witch_Sprite_Sheet", true)
-  to2 = CreatePlayer(8*32, 5*32,"Witch_Sprite_Sheet", false)
+  player = CreatePlayer(6*32, 5*32, "witch", "magician", true)
+  to2 = CreatePlayer(8*32, 5*32, "witch", "magician", false)
   UpLevel(player, 50)
   UpLevel(to2, 50)
   -- Movement
@@ -71,8 +71,8 @@ function LoadGameplay()
 
   SpawnMonster()
   SpawnMonster()
-  --SpawnMonster()
-  --SpawnMonster()
+  SpawnMonster()
+  SpawnMonster()
 
   SetCamera("scale", 2)
 
@@ -86,7 +86,7 @@ end
 
 function love.update(dt)
   if playState == "gameplay" then
-    --UpdateMap(dt)
+    UpdateMap(dt)
     UpdateSprite(dt)
     UpdatePlayer(dt)
     UpdateEnemy(dt)
@@ -110,6 +110,10 @@ function love.draw()
     DrawHUD()
     love.graphics.pop()
   end
+end
+
+function love.keypressed(key, scancode, isrepeat)
+  if key == "p" then UpLevel(player, 1) end
 end
 
 function GetPlayState()

@@ -35,13 +35,9 @@ local function getEmptyPosition(pEnemy)
 end
 
 function CreateEnemy(pX, pY, pImage)
-  local enemy = CreateSprite(pX, pY, pImage)
-
-  CreateAnimation(enemy, "idle", {1, 2, 3, 4}, true)
-  CreateAnimation(enemy, "run", {5, 6, 7, 8, 9, 10, 11, 12}, true)
-  CreateAnimation(enemy, "cast", {13, 14, 15, 16, 17, 18, 19, 20}, false)
-  CreateAnimation(enemy, "hit", {21, 22, 23, 24}, false)
-  CreateAnimation(enemy, "death", {25, 26, 27, 28, 29, 30, 31, 32, 33, 34}, false)
+  local enemy = GetSprite("witch")
+  enemy.x = pX
+  enemy.y = pY
 
   enemy.spells = {}
   AddSpell(enemy, "lightning")
@@ -49,8 +45,6 @@ function CreateEnemy(pX, pY, pImage)
 
   enemy.spellId = -1
   enemy.speed = 0.5
-  enemy.distanceToDetect = 90
-  enemy.maxDistanceToDetect = 170
 
   enemy.isAttackable = true
   enemy.isPlayerDetected = false
@@ -79,24 +73,11 @@ function CreateEnemy(pX, pY, pImage)
 
   enemy.newX, enemy.newY = getEmptyPosition(enemy)
 
-  enemy.level = 1--math.random(1,5)
-  enemy.maxLife = 150
-  enemy.life = enemy.maxLife
-  enemy.regenHpPerSecond = 0.2
-  enemy.bonusRegenHp = 0
+  enemy.level = math.random(1,5)
 
-  enemy.maxMana = 125
-  enemy.mana = enemy.maxMana
-  enemy.regenManaPerSecond = 0.1
-  enemy.bonusRegenMana = 0
-  enemy.experience = 48 * 4 * enemy.level
+  SetDefaultStat(enemy, "enemy", "debug")
+
   enemy.isExperienceGiven = false
-
-  enemy.str = 0
-  enemy.int = 3 * enemy.level
-  enemy.agi = 0
-  enemy.wis = 0
-  enemy.shd = 5 * enemy.level
 
   enemy.killBy = {}
 
@@ -153,7 +134,7 @@ function UpdateEnemy(dt)
         end
 
         for k,spell in pairs(enemy.spells) do
-          if enemy.spellId == -1 and spell.isReady and player.isAttackable and spell.range >= distToPlayer and enemy.mana >= player.spells[k].cost and enemy.isReadyToCast then
+          if enemy.spellId == -1 and spell.isReady and player.isAttackable and spell.range >= distToPlayer and enemy.mana >= enemy.spells[k].cost and enemy.isReadyToCast then
             PlaySE("spell")
             enemy.isCastSpell = true
             enemy.spellId = k
@@ -293,7 +274,9 @@ function UpdateEnemy(dt)
 
     -- Cast spell
     if enemy.isCastSpell and enemy.life > 0 then
-      enemy.isFlip = player.x < enemy.x
+      if player then
+        enemy.isFlip = player.x < enemy.x
+      end
       if not enemy.canMove then
         StartAnimation(enemy, "cast")
         if enemy.currentAnimation == "cast" and (enemy.currentFrame >= #enemy.animation["cast"].frames) then

@@ -339,94 +339,25 @@ function DrawSpell(pPlayer)
   love.graphics.draw(spell_ui.image, spell_ui.x, spell_ui.y, 0, 1.5, 1.5)
 
   -- Spell Icon
-  if spells[1] then
-    love.graphics.draw(spells[1].image, spells[1].x, spells[1].y, 0, spells[1].scale, spells[1].scale)
-    love.graphics.draw(spells[1].border, spells[1].x, spells[1].y, 0, spells[1].scale, spells[1].scale)
-    love.graphics.setFont(GetFont("number_shadow"))
-    love.graphics.print(pPlayer.spells[1].cost, spells[1].x + 2, spells[1].y + 2)
-    love.graphics.setFont(GetFont("shadow"))
-    if not pPlayer.spells[1].isReady then
-      local percent = pPlayer.spells[1].timerCooldown/pPlayer.spells[1].cooldown
-      love.graphics.push()
-      love.graphics.setColor(0.5,0.3,0.8,0.8)
-      love.graphics.arc("fill", "pie", spells[1].x + (spells[1].w*spells[1].scale)/2, spells[1].y + (spells[1].h*spells[1].scale)/2, 20, (math.pi*2), (math.pi*2)*percent)
-      love.graphics.setColor(1,1,1,1)
-      love.graphics.pop()
-    end
-  end
-  if spells[2] then
-    love.graphics.draw(spells[2].image, spells[2].x, spells[2].y, 0, spells[2].scale, spells[2].scale)
-    love.graphics.draw(spells[2].border, spells[2].x, spells[2].y, 0, spells[2].scale, spells[2].scale)
-    love.graphics.setFont(GetFont("number_shadow"))
-    love.graphics.print(pPlayer.spells[2].cost, spells[2].x + 2, spells[2].y + 2)
-    love.graphics.setFont(GetFont("shadow"))
-    if not pPlayer.spells[2].isReady then
-      local percent = pPlayer.spells[2].timerCooldown/pPlayer.spells[2].cooldown
-      love.graphics.push()
-      love.graphics.setColor(0.5,0.3,0.8,0.8)
-      love.graphics.arc("fill", "pie", spells[2].x + (spells[2].w*spells[2].scale)/2, spells[2].y + (spells[2].h*spells[2].scale)/2, 20, (math.pi*2), (math.pi*2)*percent)
-      love.graphics.setColor(1,1,1,1)
-      love.graphics.pop()
-    end
-  end
-  if spells[3] then
-    love.graphics.draw(spells[3].image, spells[3].x, spells[3].y, 0, spells[3].scale, spells[3].scale)
-    love.graphics.draw(spells[3].border, spells[3].x, spells[3].y, 0, spells[3].scale, spells[3].scale)
-    love.graphics.setFont(GetFont("number_shadow"))
-    love.graphics.print(pPlayer.spells[3].cost, spells[3].x + 2, spells[3].y + 2)
-    love.graphics.setFont(GetFont("shadow"))
-    if not pPlayer.spells[3].isReady then
-      local percent = pPlayer.spells[3].timerCooldown/pPlayer.spells[3].cooldown
-      love.graphics.push()
-      love.graphics.setColor(0.5,0.3,0.8,0.8)
-      love.graphics.arc("fill", "pie", spells[3].x + (spells[3].w*spells[3].scale)/2, spells[3].y + (spells[3].h*spells[3].scale)/2, 20, (math.pi*2), (math.pi*2)*percent)
-      love.graphics.setColor(1,1,1,1)
-      love.graphics.pop()
-    end
-  end
-  if spells[4] then
-    love.graphics.draw(spells[4].image, spells[4].x, spells[4].y, 0, spells[4].scale, spells[4].scale)
-    love.graphics.draw(spells[4].border, spells[4].x, spells[4].y, 0, spells[4].scale, spells[4].scale)
-    love.graphics.setFont(GetFont("number_shadow"))
-    love.graphics.print(pPlayer.spells[4].cost, spells[4].x + 2, spells[4].y + 2)
-    love.graphics.setFont(GetFont("shadow"))
-    if not pPlayer.spells[4].isReady then
-      local percent = pPlayer.spells[4].timerCooldown/pPlayer.spells[4].cooldown
-      love.graphics.push()
-      love.graphics.setColor(0.5,0.3,0.8,0.8)
-      love.graphics.arc("fill", "pie", spells[4].x + (spells[4].w*spells[4].scale)/2, spells[4].y + (spells[4].h*spells[4].scale)/2, 20, (math.pi*2), (math.pi*2)*percent)
-      love.graphics.setColor(1,1,1,1)
-      love.graphics.pop()
-    end
-  end
-  if spells[5] then
-    love.graphics.draw(spells[5].image, spells[5].x, spells[5].y, 0, spells[5].scale, spells[5].scale)
-    love.graphics.draw(spells[5].border, spells[5].x, spells[5].y, 0, spells[5].scale, spells[5].scale)
-    love.graphics.setFont(GetFont("number_shadow"))
-    love.graphics.print(pPlayer.spells[5].cost, spells[5].x + 2, spells[5].y + 2)
-    love.graphics.setFont(GetFont("shadow"))
-    if not pPlayer.spells[5].isReady then
-      local percent = pPlayer.spells[5].timerCooldown/pPlayer.spells[5].cooldown
-      love.graphics.push()
-      love.graphics.setColor(0.5,0.3,0.8,0.8)
-      love.graphics.arc("fill", "pie", spells[5].x + (spells[5].w*spells[5].scale)/2, spells[5].y + (spells[5].h*spells[5].scale)/2, 20, (math.pi*2), (math.pi*2)*percent)
-      love.graphics.setColor(1,1,1,1)
-      love.graphics.pop()
-    end
-  end
-  if spells[6] then
-    love.graphics.draw(spells[6].image, spells[6].x, spells[6].y, 0, spells[6].scale, spells[6].scale)
-    love.graphics.draw(spells[6].border, spells[6].x, spells[6].y, 0, spells[6].scale, spells[6].scale)
-    love.graphics.setFont(GetFont("number_shadow"))
-    love.graphics.print(pPlayer.spells[6].cost, spells[6].x + 2, spells[6].y + 2)
-    love.graphics.setFont(GetFont("shadow"))
-    if not pPlayer.spells[6].isReady then
-      local percent = pPlayer.spells[6].timerCooldown/pPlayer.spells[6].cooldown
-      love.graphics.push()
-      love.graphics.setColor(0.5,0.3,0.8,0.8)
-      love.graphics.arc("fill", "pie", spells[6].x + (spells[6].w*spells[6].scale)/2, spells[6].y + (spells[6].h*spells[6].scale)/2, 20, (math.pi*2), (math.pi*2)*percent)
-      love.graphics.setColor(1,1,1,1)
-      love.graphics.pop()
+  for i=#spells, 1, -1 do
+    if spells[i] then
+      if pPlayer.mana < pPlayer.spells[i].cost then
+        love.graphics.setColor(0.3,0.3,0.3)
+      end
+      love.graphics.draw(spells[i].image, spells[i].x, spells[i].y, 0, spells[i].scale, spells[i].scale)
+      love.graphics.draw(spells[i].border, spells[i].x, spells[i].y, 0, spells[i].scale, spells[i].scale)
+      love.graphics.setColor(1,1,1)
+      love.graphics.setFont(GetFont("number_shadow"))
+      love.graphics.print(pPlayer.spells[i].cost, spells[i].x + 2, spells[i].y + 2)
+      love.graphics.setFont(GetFont("shadow"))
+      if not pPlayer.spells[i].isReady then
+        local percent = pPlayer.spells[i].timerCooldown/pPlayer.spells[i].cooldown
+        love.graphics.push()
+        love.graphics.setColor(0.5,0.3,0.8,0.8)
+        love.graphics.arc("fill", "pie", spells[i].x + (spells[i].w*spells[i].scale)/2, spells[i].y + (spells[i].h*spells[i].scale)/2, 20, (math.pi*2), (math.pi*2)*percent)
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.pop()
+      end
     end
   end
 

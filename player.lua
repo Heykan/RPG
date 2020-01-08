@@ -24,33 +24,30 @@ local function MouseLeave(pSprite, pId)
 end
 
 function SetPlayerStat(pPlayer)
-  pPlayer.maxLife = pPlayer.baseLife * (1.2 * pPlayer.level)
-  pPlayer.maxMana = pPlayer.baseMana * (0.8 * pPlayer.level)
+  pPlayer.maxLife = pPlayer.baseLife + pPlayer.baseLife * (pPlayer.lvlLife * (pPlayer.level-1))
+  pPlayer.maxMana = pPlayer.baseMana + pPlayer.baseMana * (pPlayer.lvlMana * (pPlayer.level-1))
 
   pPlayer.life = pPlayer.maxLife
   pPlayer.mana = pPlayer.maxMana
 
-  pPlayer.regenHpPerSecond = math.round(pPlayer.regenHpPerSecond + 0.03 * (pPlayer.level-1))
-  pPlayer.regenManaPerSecond = math.round(pPlayer.regenManaPerSecond + 0.02 * (pPlayer.level-1))
+  pPlayer.regenHpPerSecond = math.round(pPlayer.regenHpPerSecond + pPlayer.lvlRegenHp * (pPlayer.level-1))
+  pPlayer.regenManaPerSecond = math.round(pPlayer.regenManaPerSecond + pPlayer.lvlRegenMana * (pPlayer.level-1))
 
   pPlayer.experience = 0
-  pPlayer.maxExperience = math.floor((pPlayer.baseExperience * 1.2)) * pPlayer.level
+  pPlayer.maxExperience = pPlayer.baseExperience + math.floor((pPlayer.baseExperience * 1.2)) * (pPlayer.level-1)
 
-  pPlayer.str = pPlayer.str + 0.05 * (pPlayer.level-1)
-  pPlayer.int = pPlayer.int + 0.2 * (pPlayer.level-1)
-  pPlayer.agi = pPlayer.agi + 0.1 * (pPlayer.level-1)
-  pPlayer.wis = pPlayer.wis + 0.1 * (pPlayer.level-1)
-  pPlayer.shd = pPlayer.shd + 0.3 * (pPlayer.level-1)
+  pPlayer.str = pPlayer.str + pPlayer.lvlStr * (pPlayer.level-1)
+  pPlayer.int = pPlayer.int + pPlayer.lvlInt * (pPlayer.level-1)
+  pPlayer.agi = pPlayer.agi + pPlayer.lvlAgi * (pPlayer.level-1)
+  pPlayer.wis = pPlayer.wis + pPlayer.lvlWis * (pPlayer.level-1)
+  pPlayer.shd = pPlayer.shd + pPlayer.lvlShd * (pPlayer.level-1)
 end
 
-function CreatePlayer(pX, pY, pImage, pIsControllable)
-  local player = CreateSprite(pX, pY, pImage)
+function CreatePlayer(pX, pY, pSprite, pClass, pIsControllable)
+  local player = GetSprite(pSprite)
 
-  CreateAnimation(player, "idle", {1, 2, 3, 4}, true)
-  CreateAnimation(player, "run", {5, 6, 7, 8, 9, 10, 11, 12}, true)
-  CreateAnimation(player, "cast", {13, 14, 15, 16, 17, 18, 19, 20}, false)
-  CreateAnimation(player, "hit", {21, 22, 23, 24}, false)
-  CreateAnimation(player, "death", {25, 26, 27, 28, 29, 30, 31, 32, 33, 34}, false)
+  player.x = pX
+  player.y = pY
 
   player.speed = 1
 
@@ -66,36 +63,15 @@ function CreatePlayer(pX, pY, pImage, pIsControllable)
   player.spellId = -1
   player.isControllable = pIsControllable or false
 
-  player.baseLife = 250
-  player.baseMana = 450
-  player.baseExperience = 780
-
   player.level = 1
-  player.regenHpPerSecond = 0.5
-  player.bonusRegenHp = 0
 
-  player.regenManaPerSecond = 0.2
-  player.bonusRegenMana = 0
+  SetDefaultStat(player, "player", pClass)
 
-  player.experience = 0
-  player.maxExperience = 780
-
-  player.str = 8
-  player.int = 9
-  player.agi = 5
-  player.wis = 11
-  player.shd = 8
+  player.maxExperience = player.baseExperience
 
   player.powerType = "int"
 
   player.gold = 0
-
-  AddSpell(player, "lightning")
-  AddSpell(player, "spiritFire")
-  AddSpell(player, "nightmare")
-  AddSpell(player, "fireHell")
-  AddSpell(player, "blueFire")
-  AddSpell(player, "lotus")
 
   SetPlayerStat(player)
 
@@ -238,22 +214,7 @@ function UpdatePlayer(dt)
     end
 
     -- Casting spell
-    if player.isCastSpell and player.life > 0 then
-      player.isFlip = target.x < player.x
-      if not player.canMove then
-        StartAnimation(player, "cast")
-        if player.currentAnimation == "cast" and (player.currentFrame >= #player.animation["cast"].frames) then
-          PlaySpell(player, player.spells[player.spellId], target)
-          player.canMove = true
-          player.isCastSpell = false
-          player.spellId = -1
-        end
-      else
-        PlaySpell(player, player.spells[player.spellId], target)
-        player.isCastSpell = false
-        player.spellId = -1
-      end
-    end
+    player.updateClass(player, target, dt)
 
     if player.isRemovable then
       table.remove(lstPlayers, i)
