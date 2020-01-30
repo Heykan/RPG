@@ -37,6 +37,7 @@ require "fx"
 require "audio"
 require "map"
 require "hud"
+require "item"
 
 local playState = "gameplay"
 
@@ -104,6 +105,7 @@ function love.draw()
     DrawMap()
     DrawSprite()
     DrawFx()
+    DrawUpperMap()
     DrawDamage()
     love.graphics.pop()
     love.graphics.push()

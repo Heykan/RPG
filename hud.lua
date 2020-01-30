@@ -156,6 +156,7 @@ local showItemDrop = false
 local showInventory = false
 local showSpellInfoBulle = false
 local alreadyOnSpell = false
+local mouseDownOnDrop = false
 -------
 
 --- number
@@ -389,15 +390,45 @@ function DrawSpell(pPlayer)
 end
 
 function DrawItemDrop()
+  local mx,my = love.mouse.getPosition()
+  local hover, down = false, false
+  local target = GetSelectedSprite()
+
   love.graphics.push()
   love.graphics.draw(drop_ui.image, drop_ui.x, drop_ui.y)
   love.graphics.setFont(GetFont("shadow"))
   love.graphics.printf("Item Drop", drop_ui.x + drop_ui.w/2 - 125/2, drop_ui.y + 25, 125, "center")
   love.graphics.setFont(GetFont("number_shadow"))
 
+  if #target.inventory > 0 then
+
+    for i=#target.inventory,1,-1 do
+      local item = target.inventory[i]
+      local image = GetItemImage()
+      local quad = GetItemQuad(item.iconId)
+      local itemX, itemY = drop_ui.x + 22, drop_ui.y + 67 + (37 * (i-1)) + i
+      love.graphics.draw(image, quad.data, itemX, itemY)
+      love.graphics.setFont(GetFont("shadow"))
+      love.graphics.printf(item.name, drop_ui.x + 50, drop_ui.y + 67 + (37 * (i-1)) + i*2, 102, "center")
+      love.graphics.setFont(GetFont("number_shadow"))
+
+      if mx >= itemX and mx <= itemX + 124
+      and my >= itemY and my <= itemY + 30 then
+        if love.mouse.isDown(2) then
+          mouseDownOnDrop = true
+        end
+        if not love.mouse.isDown(2) and mouseDownOnDrop then
+          mouseDownOnDrop = false
+          if #GetPlayer(1).inventory < 72 then
+            table.insert(GetPlayer(1).inventory, item)
+            table.remove(target.inventory, i)
+          end
+        end
+      end
+    end
+  end
+
   -- Check mouse click on button
-  local mx,my = love.mouse.getPosition()
-  local hover, down = false, false
   if mx >= round_button.x + 20 and mx <= round_button.x + round_button.w
      and my >= round_button.y + 8 and my <= round_button.y + round_button.h then
        hover = true
@@ -426,7 +457,8 @@ function DrawItemDrop()
 end
 
 function DrawInventory()
-love.graphics.push()
+  local player = GetPlayer(1)
+  love.graphics.push()
 
   -- Check mouse click on button
   local mx,my = love.mouse.getPosition()
@@ -456,7 +488,27 @@ love.graphics.push()
   love.graphics.draw(inventory_ui.image, inventory_ui.x, inventory_ui.y)
   love.graphics.setFont(GetFont("shadow"))
   love.graphics.printf("Inventory", inventory_ui.x + inventory_ui.w/2 - 125/2, inventory_ui.y + 8, 125, "center")
-  love.graphics.printf(tostring(GetPlayer(1).gold), inventory_ui.x + 28, inventory_ui.y + 354, 250, "left")
+  love.graphics.printf(tostring(player.gold), inventory_ui.x + 28, inventory_ui.y + 354, 250, "left")
+
+  if #player.inventory > 0 then
+    for i=#player.inventory,1,-1 do
+      local item = player.inventory[i]
+      local image = GetItemImage()
+      local quad = GetItemQuad(item.iconId)
+      local itemX, itemY = inventory_ui.x + 195 + (37 * (i-1)), inventory_ui.y + 41
+      love.graphics.draw(image, quad.data, itemX, itemY)
+
+      if mx >= itemX and mx <= itemX + 124
+      and my >= itemY and my <= itemY + 30 then
+        if love.mouse.isDown(2) then
+          mouseDownOnDrop = true
+        end
+        if not love.mouse.isDown(2) and mouseDownOnDrop then
+          mouseDownOnDrop = false
+        end
+      end
+    end
+  end
 
   if down and hover then
     leftMouseReleased = true

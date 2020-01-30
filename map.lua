@@ -1,8 +1,9 @@
 local map = {}
 local tilesheet = {}
 
-local TILE_SIZE = 32
+local TILE_SIZE = 16
 local MAX_MONSTER = 7
+local COLLIDE_TILE = 1327
 
 local collide_layer = {}
 
@@ -67,6 +68,22 @@ function DrawMap()
   end
 end
 
+function DrawUpperMap()
+  local camX,camY = GetCamera("xy")
+  for k,layer in pairs(map.layers) do
+    if string.find(layer.name, "upper") then
+      for i=1,layer.height do
+        for j=1,layer.width do
+          local id = layer.data[layer.width * (i-1) + (j-1) + 1]
+          if id ~= 0 then
+            love.graphics.draw(tilesheet.image, tilesheet.quad[id].data, (j-1)*TILE_SIZE + camX, (i-1)*TILE_SIZE + camY)
+          end
+        end
+      end
+    end
+  end
+end
+
 function GetTileSize()
   return TILE_SIZE
 end
@@ -80,10 +97,10 @@ end
 function IsSolideZone(pX, pY, pW, pH)
   for k,layer in pairs(map.layers) do
     if layer.name == "collide_layer" then
-      return GetTileAt(pX-pW, pY) == 324 or
-             GetTileAt(pX-pW, pY+pH) == 324 or
-             GetTileAt(pX+pW, pY+pH) == 324 or
-             GetTileAt(pX+pW, pY) == 324
+      return GetTileAt(pX-pW, pY) == COLLIDE_TILE or
+             GetTileAt(pX-pW, pY+pH) == COLLIDE_TILE or
+             GetTileAt(pX+pW, pY+pH) == COLLIDE_TILE or
+             GetTileAt(pX+pW, pY) == COLLIDE_TILE
     end
   end
 end

@@ -35,6 +35,8 @@ debug.lvlWis = 0.1
 debug.lvlShd = 0.3
 debug.lvlAtkSpeed = 0.01
 
+debug.dropableItem = {"healthPotion"}
+
 debug.spells = {}
 
 AddSpell(debug, "lightning")

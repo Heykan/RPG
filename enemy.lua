@@ -86,6 +86,8 @@ function CreateEnemy(pX, pY, pImage)
   enemy.gold = math.random(3, 13) * enemy.level
   enemy.isGoldGiven = false
 
+  enemy.isInventoryGenerated = false
+
   table.insert(lstEnemies, enemy)
   return enemy
 end
@@ -242,7 +244,21 @@ function UpdateEnemy(dt)
       end
     else
       if enemy.life <= 0 then
-        StartAnimation(enemy, "death")
+      StartAnimation(enemy, "death")
+
+        -- Generate item drop
+        if not enemy.isInventoryGenerated then
+          enemy.isInventoryGenerated = true
+          local qtyItem = rnd(0, 4)
+          if qtyItem > 0 then
+            for i=1, qtyItem do
+              local item = enemy.dropableItem[rnd(1, #enemy.dropableItem)]
+              AddItem(enemy, item, 1)
+            end
+          end
+        end
+
+        -- Start give gold and xp
         local enemyReduceXp = false
         for k,p in pairs(enemy.killBy) do
           if p.life > 0 then

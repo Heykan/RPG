@@ -423,6 +423,8 @@ function SetDefaultStat(pSprite, pType, pClass)
     pSprite.distanceToDetect = class.distanceToDetect
     pSprite.maxDistanceToDetect = class.maxDistanceToDetect
 
+    pSprite.dropableItem = class.dropableItem
+
     for k,spell in pairs(class.spells) do
       table.insert(pSprite.spells,spell)
     end
