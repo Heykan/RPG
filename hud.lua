@@ -495,7 +495,7 @@ function DrawInventory()
       local item = player.inventory[i]
       local image = GetItemImage()
       local quad = GetItemQuad(item.iconId)
-      local itemX, itemY = inventory_ui.x + 195 + (37 * (i-1)), inventory_ui.y + 41
+      local itemX, itemY = inventory_ui.x + 195 + (37 * (i-1)), inventory_ui.y + 41 * nLin
       love.graphics.draw(image, quad.data, itemX, itemY)
 
       if mx >= itemX and mx <= itemX + 124
